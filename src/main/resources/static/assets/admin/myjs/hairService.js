@@ -165,15 +165,10 @@ function renderItemStr(item) {
                     <td>
                         <div class="d-flex">
                         <button class="dropdown-item" onclick="showEdit(${item.id})"
-                        data-bs-toggle="modal" data-bs-target="#staticBackdrop"
-                        ><i class="bx bx-edit-alt me-1"></i> Edit</button
-                            >
-                        <button class="dropdown-item" onclick="deleteHairDetail(${item.id})"
-                        ><i class="bx bx-trash me-1"></i> Delete</button
-                        >
+                        data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="bx bx-edit-alt me-1"></i> Edit</button>
+                        <button class="dropdown-item" onclick="deleteHairDetail(${item.id})"><i class="bx bx-trash me-1"></i> Delete</button>
                         </div>
-              </div>
-            </div>
+              
                     </td>
                 </tr>`
 }
@@ -199,8 +194,8 @@ function getDataInput() {
             name: 'description',
             value: hairSelected.description,
             required: true,
-            pattern: "^[A-Za-zÀ-Ỷà-ỷẠ-Ỵạ-ỵĂăÂâĐđÊêÔôƠơƯưỨứỪừỰựỬửỮữỨứỬửỰựỦủỤụỠỡỞởỢợỞởỚớỔổỒồỐốỎỏỊịỈỉỌọỈỉỊịỆệỄễỀềẾếỂểỈỉỄễỆệỂểỀề0-9 ,.()]{6,100}",
-            message: "Description must have minimum is 6 characters and maximum is 100 characters",
+            pattern: "^[A-Za-zÀ-Ỷà-ỷẠ-Ỵạ-ỵĂăÂâĐđÊêÔôƠơƯưỨứỪừỰựỬửỮữỨứỬửỰựỦủỤụỠỡỞởỢợỞởỚớỔổỒồỐốỎỏỊịỈỉỌọỈỉỊịỆệỄễỀềẾếỂểỈỉỄễỆệỂểỀề0-9 ,.()]{6,1000}",
+            message: "Description must have minimum is 6 characters and maximum is 1000 characters",
         },
         {
             label: 'Price',

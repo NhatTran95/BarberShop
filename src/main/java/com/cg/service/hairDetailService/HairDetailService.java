@@ -119,7 +119,22 @@ public class HairDetailService {
             List<String> images = hairDetail.getHairDetailImages().stream().map(HairDetailImage::getFileUrl)
                     .collect(Collectors.toList());
             result.setImages(images);
+            result.setId(hairDetail.getId());
             return result;
         }).collect(Collectors.toList());
+    }
+
+    public Optional<HairDetailResponse> getById(Long id) {
+        return hairDetailRepository.findById(id).map(hairDetail -> {
+            var result = new HairDetailResponse();
+            result.setName(hairDetail.getName());
+            result.setDescription(hairDetail.getDescription());
+            result.setPrice(hairDetail.getPrice());
+            List<String> images = hairDetail.getHairDetailImages().stream().map(HairDetailImage::getFileUrl)
+                    .collect(Collectors.toList());
+            result.setImages(images);
+            result.setId(hairDetail.getId());
+            return result;
+        });
     }
 }

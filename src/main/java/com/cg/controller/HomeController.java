@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collection;
@@ -40,7 +41,8 @@ public class HomeController {
         }
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String username = userDetails.getUsername();
-        model.addAttribute("username", username);
+        User user = userRepository.findByUsername(username);
+        view.addObject("user",user);
 
         // Kiểm tra vai trò và thêm vào model nếu cần
         if (userDetails.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN"))) {
@@ -77,7 +79,7 @@ public class HomeController {
     }
 
 
-    @GetMapping("/services")
+    @GetMapping("services")
     public ModelAndView showServicePage(Model model, Authentication authentication) {
         ModelAndView view = new ModelAndView("views/services");
         view.addObject("hairDetails", hairDetailService.getAll());
@@ -87,7 +89,8 @@ public class HomeController {
         }
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String username = userDetails.getUsername();
-        model.addAttribute("username", username);
+        User user = userRepository.findByUsername(username);
+        view.addObject("user",user);
 
         // Kiểm tra vai trò và thêm vào model nếu cần
         if (userDetails.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN"))) {
@@ -98,7 +101,29 @@ public class HomeController {
         return view;
     }
 
-    @GetMapping("/portfolio")
+    @GetMapping("/service/{id}")
+    public ModelAndView showServiceDetail(Model model, @PathVariable Long id, Authentication authentication) {
+        ModelAndView view = new ModelAndView("views/servicesDetail");
+        view.addObject("hairDetail", hairDetailService.getById(id).get());
+
+        if(authentication == null){
+            return view;
+        }
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username = userDetails.getUsername();
+        User user = userRepository.findByUsername(username);
+        view.addObject("user",user);
+
+        // Kiểm tra vai trò và thêm vào model nếu cần
+        if (userDetails.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN"))) {
+            model.addAttribute("isAdmin", true);
+        } else {
+            model.addAttribute("isUser",true);
+        }
+        return view;
+    }
+
+    @GetMapping("portfolio")
     public ModelAndView showPortfolioPage(Model model, Authentication authentication) {
         ModelAndView view = new ModelAndView("views/portfolio");
         view.addObject("stylists", stylistService.getAll());
@@ -108,7 +133,8 @@ public class HomeController {
         }
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String username = userDetails.getUsername();
-        model.addAttribute("username", username);
+        User user = userRepository.findByUsername(username);
+        view.addObject("user",user);
 
         // Kiểm tra vai trò và thêm vào model nếu cần
         if (userDetails.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN"))) {
@@ -120,10 +146,24 @@ public class HomeController {
 
     }
 
-    @GetMapping("/history")
-    public ModelAndView showHistoryPage(Model model, Authentication authentication) {
+    @GetMapping("/history/{id}")
+    public ModelAndView showHistoryPage(Model model, Authentication authentication, @PathVariable Long id) {
         ModelAndView view = new ModelAndView("views/history");
 
+        if(authentication == null){
+            return view;
+        }
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username = userDetails.getUsername();
+        User user = userRepository.findByUsername(username);
+        view.addObject("user",user);
+
+        // Kiểm tra vai trò và thêm vào model nếu cần
+        if (userDetails.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN"))) {
+            model.addAttribute("isAdmin", true);
+        } else {
+            model.addAttribute("isUser",true);
+        }
 
         return view;
     }
@@ -171,6 +211,16 @@ public class HomeController {
         } else {
             throw new IllegalStateException("Vai trò không hợp lệ.");
         }
+    }
+
+    @GetMapping("403")
+    public String error403(){
+        return "error403";
+    }
+
+    @GetMapping("errors")
+    public String errors() {
+        return "errors";
     }
 
 

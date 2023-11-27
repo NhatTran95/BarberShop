@@ -9,7 +9,7 @@
     font-family: 'Poppins', sans-serif;
 }
 body{
-    background: url("717EM2Ai2XL.jpg");
+    background: url("bg2.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -33,7 +33,7 @@ body{
     height: 100px;
     line-height: 100px;
     background: linear-gradient(rgba(39,39,39, 0.6), transparent);
-    z-index: 100;
+    /*z-index: 100;*/
 }
 .nav-logo p{
     color: white;
@@ -90,7 +90,7 @@ body{
     justify-content: center;
 
     width: 512px;
-    height: 520px;
+    height: 580px;
     overflow: hidden;
     z-index: 2;
 }
@@ -131,6 +131,19 @@ header{
 .two-forms{
     display: flex;
     gap: 10px;
+}
+.input-box {
+    position: relative;
+}
+
+.input-box label {
+    display: block;
+    position: absolute;
+    left: 17px;
+    bottom: 0px;
+    color: #fff;
+    font-size: 16px;
+    transition: .2s ease;
 }
 .input-field{
     font-size: 15px;
@@ -253,4 +266,37 @@ a {
 
 .text-danger {
     color: #dc3545 !important;
+}
+
+.error-area {
+    position: fixed;
+    width: 500px;
+    /*right: 10px;*/
+    /*bottom: 20px;*/
+    top: 8px;
+    border-radius: 10px;
+    padding: 0px 20px;
+    /*margin-bottom: 15px;*/
+    /*color: #842029;*/
+    background-color: rgb(245, 208, 168);
+    border-color: #f5c2c7;
+
+}
+
+.error-area ul {
+    margin-left: -3rem;
+}
+
+label.error {
+    /*display: list-item;*/
+    /*color: #8c0419;*/
+    color: #dc3545
+}
+
+.hide {
+    display: none;
+}
+
+.show {
+    display: block !important;
 }

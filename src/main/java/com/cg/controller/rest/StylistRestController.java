@@ -21,8 +21,9 @@ public class StylistRestController {
 
 
     @GetMapping
-    public ResponseEntity<Page<StylistListResponse>> getHairDetails(@PageableDefault(size = 5) Pageable pageable){
-        return new ResponseEntity<>(stylistService.getStylists(pageable), HttpStatus.OK);
+    public ResponseEntity<Page<StylistListResponse>> getHairDetails(@PageableDefault(size = 5) Pageable pageable,
+                                                                    @RequestParam(defaultValue = "") String search){
+        return new ResponseEntity<>(stylistService.getStylists(pageable, search), HttpStatus.OK);
     }
 
     @PostMapping

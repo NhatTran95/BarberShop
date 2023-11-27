@@ -29,11 +29,16 @@ public class BookingRestController {
         return new ResponseEntity<>(bookingService.getAll(pageable, search), HttpStatus.OK);
     }
 
-//    @GetMapping("{id}")
-//    public ResponseEntity<Page<BookingListResponse>> listById(@PageableDefault(size = 5) Pageable pageable,
-//                                                              @PathVariable Long id){
-//        return new ResponseEntity<>(bookingService.getById(pageable,id), HttpStatus.OK);
-//    }
+    @GetMapping("{id}")
+    public ResponseEntity<List<BookingListResponse>> listById(@PathVariable Long id){
+        return new ResponseEntity<>(bookingService.getByIdUser(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/detail/{id}")
+    public ResponseEntity<List<BookingListResponse>> findByBookingId(@PathVariable Long id) {
+        return new ResponseEntity<>(bookingService.getByIdBooking(id), HttpStatus.OK);
+    }
+
 
     @PostMapping
     public ResponseEntity<?> create(@RequestBody BookingSaveRequest request){

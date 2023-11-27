@@ -139,7 +139,7 @@
                 <ul th:each="service: ${hairDetails}" class="service_home">
                   <li th:text="${service.name}" class="service_items_home">
                   </li>
-                    <li class="service_items_home" th:text="' .................... ' + ${#strings.substringBefore(service.price.toString(), '.')} + ' VND'"></li>
+                    <li class="service_items_home" th:text="' .................... ' + ${service.price} + ' VND'"></li>
                 </ul>
               </div>
             </div>

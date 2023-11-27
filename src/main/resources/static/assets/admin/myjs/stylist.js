@@ -150,9 +150,9 @@ function renderItemStr(item) {
 
     const statusSelectOptions = statusOptions.map(status => {
         if (status === item.status) {
-            return `<option value="${status}" selected>${status}</option>`; // Thêm thuộc tính selected nếu giá trị trùng khớp
+            return `<option class="${status}" value="${status}" selected>${status}</option>`; // Thêm thuộc tính selected nếu giá trị trùng khớp
         } else {
-            return `<option value="${status}">${status}</option>`;
+            return `<option class="${status}" value="${status}">${status}</option>`;
         }
     }).join(''); // Tạo các option cho ô select
 
@@ -172,7 +172,7 @@ function renderItemStr(item) {
                         ${item.gender}
                     </td>
                     <td>
-                        <select class="status-select" data-item-id="${item.id}">${statusSelectOptions}</select>
+                        <select class="status-select ${item.status}" data-item-id="${item.id}">${statusSelectOptions}</select>
                     </td>
                     
                     
@@ -198,6 +198,11 @@ document.addEventListener('change', async function(event) {
     if (target.classList.contains('status-select')) {
         const itemId = target.getAttribute('data-item-id');
         const newStatus = target.value;
+
+        target.classList.remove(...target.classList);
+        target.classList.add('status-select')
+        target.classList.add(newStatus);
+
         const res = await fetch('/api/stylists/' + itemId + '/' + newStatus, {
             method: 'PATCH',
         });

@@ -27,7 +27,7 @@ public class StylistService {
     private final IStylistImageRepository fileRepository;
 
     public List<SelectOptionResponse> findAll(){
-        return stylistRepository.findAll().stream()
+        return stylistRepository.findAllByStatusFree().stream()
                 .map(stylist -> new SelectOptionResponse(stylist.getId().toString(), stylist.getName()))
                 .collect(Collectors.toList());
     }
@@ -43,8 +43,9 @@ public class StylistService {
         return result;
     }
 
-    public Page<StylistListResponse> getStylists(Pageable pageable) {
-        return stylistRepository.findAll(pageable).map(e -> {
+    public Page<StylistListResponse> getStylists(Pageable pageable, String search) {
+        search = "%" + search + "%";
+        return stylistRepository.searchEverything(search ,pageable).map(e -> {
             var result = AppUtils.mapper.map(e, StylistListResponse.class);
             result.setImages(
                     e.getStylistImage().stream()

@@ -17,3 +17,36 @@
     object-fit: cover;
     margin-right: 1em;
 }
+
+.PAID {
+    background: #4eb1ef;
+    border: #2a4aee;
+    font-weight: bold;
+}
+.UNPAID{
+    background: yellow;
+    border: yellow;
+    font-weight: bold;
+}
+.CANCELLED{
+    background: #ee5d5d;
+    border: #480d0d;
+    font-weight: bold;
+}
+
+.FREE{
+    background: #4eb1ef;
+    border: #2a4aee;
+    font-weight: bold;
+}
+
+.BUSY{
+    background: #ee5d5d;
+    border: #480d0d;
+    font-weight: bold;
+}
+.status-select{
+    width: 100px;
+    height: 30px;
+    border-radius: 5px;
+}

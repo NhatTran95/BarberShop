@@ -128,3 +128,19 @@
   display: flex;
   flex-wrap: wrap;
 }
+
+#formBody div {
+  display: flex;
+  /*flex-direction: column;*/
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+#formBody p {
+  margin-bottom: 0;
+  font-weight: bold;
+}
+
+#formBody span {
+  margin-left: 50px;
+}

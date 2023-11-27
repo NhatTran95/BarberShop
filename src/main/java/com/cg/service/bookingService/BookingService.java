@@ -54,6 +54,40 @@ public class BookingService {
             return result;
         });
     }
+
+    public List<BookingListResponse> getByIdUser(Long id) {
+        return bookingRepository.findBookingsByUserId(id).stream().map(e -> {
+            var result = AppUtils.mapper.map(e, BookingListResponse.class);
+            result.setStylist(e.getStylist().getName());
+            if(e.getCustomer() == null){
+                result.setRole(e.getUser().getRole().toString());
+            } else {
+                result.setRole("Customer");
+            }
+            result.setBookingDetails(e.getBookingDetails()
+                    .stream().map(c -> c.getHairDetail().getName())
+                    .collect(Collectors.joining(", ")));
+            return result;
+        }).collect(Collectors.toList());
+    }
+
+    public List<BookingListResponse> getByIdBooking(Long id){
+        return bookingRepository.findBookingById(id).stream().map(e -> {
+            var result = AppUtils.mapper.map(e, BookingListResponse.class);
+            result.setStylist(e.getStylist().getName());
+            if(e.getCustomer() == null){
+                result.setRole(e.getUser().getRole().toString());
+            } else {
+                result.setRole("Customer");
+            }
+            result.setBookingDetails(e.getBookingDetails()
+                    .stream().map(c -> c.getHairDetail().getName() + "-" + c.getHairDetail().getPrice())
+                    .collect(Collectors.joining(", ")));
+            return result;
+        }).collect(Collectors.toList());
+    }
+
+
     public void create(BookingSaveRequest request){
         var book = AppUtils.mapper.map(request, Booking.class);
         String dateTimeBooking = request.getDayBooking() +'T'+ request.getTimeBooking();
@@ -111,5 +145,6 @@ public class BookingService {
         }
         return times;
     }
+
 
 }

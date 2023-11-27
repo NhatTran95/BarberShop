@@ -9,6 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 public interface IHairDetailRepository extends JpaRepository<HairDetail,Long> {
     @Query(value = "SELECT b FROM HairDetail b " +
             "WHERE " +
-            "b.name LIKE :search ")
+            "LOWER(b.name) LIKE LOWER(:search) ")
     Page<HairDetail> searchEverything(String search, Pageable pageable);
 }

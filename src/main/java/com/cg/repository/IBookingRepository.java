@@ -1,6 +1,7 @@
 package com.cg.repository;
 
 import com.cg.domain.Booking;
+import com.cg.service.bookingService.bookingResponse.BookingListResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,6 +22,7 @@ public interface IBookingRepository extends JpaRepository<Booking,Long> {
     List<Booking> findBookingsByUserId(Long id);
     List<Booking> findBookingsByCustomerId(Long id);
 
+    List<Booking> findBookingById(Long id);
 }
 
 

@@ -75,10 +75,10 @@
 
 <script th:if="${param.logout}">
     webToast.Info({
-        status: 'Người dùng đã đăng xuất',
+        status: 'Đăng xuất thành công',
         message: '',
         delay: 2000,
-        align: 'topright'
+        align: 'bottomright'
     });
 </script>
 
@@ -87,7 +87,7 @@
         status: 'Tài khoản hoặc mật khẩu không hợp lệ',
         message: '',
         delay: 2000,
-        align: 'topright'
+        align: 'bottomright'
     });
 </script>
 

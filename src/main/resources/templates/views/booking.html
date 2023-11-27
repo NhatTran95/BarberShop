@@ -34,7 +34,7 @@
         <div class="row">
           <div class="col-xl-12">
             <div class="hero-cap hero-cap2 pt-30 text-center">
-              <h2><span style="color: #D19F68;">BRBER</span> HAIR SALON</h2>
+              <h2><span style="color: #D19F68;">BARBER</span> HAIR SALON</h2>
             </div>
             <div class="text-center mb-3 m-4">
               <h1 class="white-color">Giờ mở cửa: 10:00 - 21:00</h1>
@@ -91,7 +91,7 @@
                   <span class="form-label">Chọn dịch vụ</span>
 
                   <select class="form-select" id="serviceBooker">
-                    <option th:each="hairDetail : ${hairDetails}" th:value="${hairDetail.value}" th:text="${hairDetail.name + ' : ' + #strings.substringBefore(hairDetail.price.toString(), '.') } + ' Đ'"></option>
+                    <option th:each="hairDetail : ${hairDetails}" th:value="${hairDetail.value}" th:text="${hairDetail.name + ' : ' + hairDetail.price } + ' Đ'"></option>
                   </select>
 
                   <button type="button" onclick="addService(); updateTotalPrice();" class="add-service-button">Thêm dịch vụ</button>

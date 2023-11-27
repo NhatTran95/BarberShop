@@ -1,6 +1,6 @@
 const divTimeButton = $('#div-time-button')
 const divTimeButtonRow = $('#div-time-button .row')
-var timeBooking;
+let timeBooking;
 
 
 const timeArr = [
@@ -61,21 +61,21 @@ dateInput.addEventListener('input', function() {
 
 function addService() {
     // Lấy giá trị đã chọn từ ô select
-    var selectedService = document.getElementById("serviceBooker");
-    var serviceText = selectedService.options[selectedService.selectedIndex].text;
-    var serviceValue = selectedService.options[selectedService.selectedIndex].value;
+    const selectedService = document.getElementById("serviceBooker");
+    const serviceText = selectedService.options[selectedService.selectedIndex].text;
+    const serviceValue = selectedService.options[selectedService.selectedIndex].value;
 
     // Tạo một thẻ div mới để hiển thị dịch vụ đã chọn
-    var serviceElement = document.createElement("div");
+    const serviceElement = document.createElement("div");
     serviceElement.classList.add("selected-service");
 
     // Tạo một thẻ span để chứa biểu tượng "X" và đặt thuộc tính onclick
-    var deleteIcon = document.createElement("span");
+    const deleteIcon = document.createElement("span");
     deleteIcon.classList.add("delete-icon");
     deleteIcon.innerHTML = '<i class="fa fa-times" onclick="deleteService(this); updateTotalPrice();"></i>';
 
     // Tạo một thẻ span để chứa nội dung dịch vụ
-    var serviceTextSpan = document.createElement("span");
+    const serviceTextSpan = document.createElement("span");
     serviceTextSpan.textContent = serviceText;
 
     serviceTextSpan.setAttribute("valueData", serviceValue);
@@ -87,7 +87,7 @@ function addService() {
     serviceElement.appendChild(deleteIcon);
 
     // Thêm thẻ div đã chọn vào một phần khác của trang (ví dụ: một div có id="selectedServices")
-    var selectedServicesDiv = document.getElementById("selectedServices");
+    const selectedServicesDiv = document.getElementById("selectedServices");
     selectedServicesDiv.appendChild(serviceElement);
 }
 
@@ -124,9 +124,9 @@ function formatInputDate() {
 }
 
 async function showTimeFree(element) {
-    var id = element.value;
+    const id = element.value;
     const dateInput = document.getElementById("dayBooking");
-    var date = dateInput.value;
+    const date = dateInput.value;
 
     const res = await fetch('/api/bookings/' + id + '/' + date);
     console.log(res);
@@ -138,9 +138,9 @@ async function showTimeFree(element) {
 
 
 async function showTimeFreeDate(element) {
-    var date = element.value;
+    const date = element.value;
     const idE = document.getElementById("stylistBooker");
-    var id = idE.value;
+    const id = idE.value;
 
     const res = await fetch('/api/bookings/' + id + '/' + date);
     console.log(res);
@@ -181,10 +181,10 @@ function checkDisable(responseJson){
 
 function deleteService(element) {
     // Lấy thẻ div chứa biểu tượng "X"
-    var serviceDiv = element.parentElement;
+    const serviceDiv = element.parentElement;
 
     // Lấy phần tử cha của thẻ div để xóa thẻ div khỏi nó
-    var selectedServicesDiv = serviceDiv.parentElement;
+    const selectedServicesDiv = serviceDiv.parentElement;
 
     // Xóa thẻ div chứa dịch vụ đã chọn
     selectedServicesDiv.remove(serviceDiv);
@@ -221,15 +221,57 @@ let categories;
 let types;
 let rooms = [];
 
-var idUser = document.getElementById("idUser").value;
+const idUser = document.getElementById("idUser").value;
 bookingForm.onsubmit = async (e) => {
-    var selectedOptions = [];
-    for (var i = 0; i < eSelectedHairDetails.length; i++) {
-        var value = eSelectedHairDetails[i].getAttribute("valueData");
+    const selectedOptions = [];
+    const dayBooking = $('#dayBooking').val();
+
+    for (let i = 0; i < eSelectedHairDetails.length; i++) {
+        const value = eSelectedHairDetails[i].getAttribute("valueData");
         selectedOptions.push(value);
     }
 
     e.preventDefault();
+
+    if(idUser == 0) {
+        await webToast.Danger({
+            status: 'Vui lòng đăng nhập để đặt lịch',
+            message: '',
+            delay: 2000,
+            align: 'topright'
+        });
+        return;
+    }
+
+    if(selectedOptions.length === 0){
+        await webToast.Danger({
+            status: 'Vui lòng chọn dịch vụ',
+            message: '',
+            delay: 2000,
+            align: 'topright'
+        });
+        return;
+    }
+
+    if(!dayBooking) {
+        await webToast.Danger({
+            status: 'Vui lòng chọn ngày',
+            message: '',
+            delay: 2000,
+            align: 'topright'
+        });
+        return;
+    }
+
+    if(timeBooking == null) {
+        await webToast.Danger({
+            status: 'Vui lòng chọn giờ',
+            message: '',
+            delay: 2000,
+            align: 'topright'
+        });
+        return;
+    }
     let data = getDataFromForm(bookingForm);
     console.log(data)
 
@@ -246,18 +288,27 @@ bookingForm.onsubmit = async (e) => {
     console.log(data)
 
 
-            await createBooking(data)
+            const res = await createBooking(data)
+            if(res.ok){
+                await webToast.Success({
+                    status: 'Đặt lịch thành công',
+                    message: '',
+                    delay: 2000,
+                    align: 'topright'
+                });
 
-            await webToast.Success({
-                status: 'Thêm thành công',
-                message: '',
-                delay: 2000,
-                align: 'topright'
-            });
+                setTimeout(() => {
+                    location.href = '/history/'+idUser
+                }, 2000)
+            }else{
+                await webToast.Danger({
+                    status: 'Lỗi, vui lòng kiểm tra lại thông tin',
+                    message: '',
+                    delay: 2000,
+                    align: 'topright'
+                });
+            }
 
-        setTimeout(() => {
-            location.href = '/history'
-        }, 2000)
 
 }
 
@@ -276,6 +327,7 @@ async function createBooking(data) {
         },
         body: JSON.stringify(data)
     })
+    return res;
 }
 
 function getCurrentDateTime(timeStr) {
@@ -313,15 +365,15 @@ function renderAllTimeButtons(timeStr) {
 
 function getDayNow(){
     // Tạo một đối tượng Date mới
-    var currentDate = new Date();
+    const currentDate = new Date();
 
 // Lấy thông tin về năm, tháng và ngày
-    var year = currentDate.getFullYear();
-    var month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Thêm 0 ở trước nếu tháng < 10
-    var day = currentDate.getDate().toString().padStart(2, '0'); // Thêm 0 ở trước nếu ngày < 10
+    const year = currentDate.getFullYear();
+    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Thêm 0 ở trước nếu tháng < 10
+    const day = currentDate.getDate().toString().padStart(2, '0'); // Thêm 0 ở trước nếu ngày < 10
 
 // Tạo chuỗi theo định dạng "YYYY-MM-DD"
-    var formattedDate = year + '-' + month + '-' + day;
+    const formattedDate = year + '-' + month + '-' + day;
 
     return formattedDate;
 }
